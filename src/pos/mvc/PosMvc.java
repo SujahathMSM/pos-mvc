@@ -4,6 +4,8 @@
  */
 package pos.mvc;
 
+import pos.mvc.view.CustomerView;
+
 /**
  *
  * @author sujah
@@ -16,6 +18,8 @@ public class PosMvc {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("Hello Sujahath to NetBeans");
+        new CustomerView().setVisible(true);
+        
     }
     
 }
