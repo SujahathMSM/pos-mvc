@@ -4,17 +4,26 @@
  */
 package pos.mvc.view;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import pos.mvc.controller.CustomerController;
+import pos.mvc.model.CustomerModel;
+
 /**
  *
  * @author sujah
  */
 public class CustomerView extends javax.swing.JFrame {
+    private CustomerController customerController;
 
     /**
      * Creates new form CustomerView
      */
     public CustomerView() {
         initComponents();
+        customerController = new CustomerController();
     }
 
     /**
@@ -102,6 +111,11 @@ public class CustomerView extends javax.swing.JFrame {
         btnSave.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSave.setText("Save Customer");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnUpdate.setText("Update Customer");
@@ -246,6 +260,11 @@ public class CustomerView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        saveCustomer();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -275,6 +294,7 @@ public class CustomerView extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new CustomerView().setVisible(true);
             }
@@ -308,4 +328,17 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JTextField txtTitle;
     private javax.swing.JTextField txtZip;
     // End of variables declaration//GEN-END:variables
+
+    private void saveCustomer(){
+        try {
+            CustomerModel customer = new CustomerModel(txtID.getText(), txtTitle.getText(), txtName.getText(), txtDOB.getText(), Double.valueOf(txtSalary.getText()), txtAddress.getText(), txtCity.getText(), txtProvince.getText(), txtZip.getText());
+            
+            String resp = customerController.saveCustomer(customer);
+            JOptionPane.showMessageDialog(this, resp);
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+   
+    }
 }

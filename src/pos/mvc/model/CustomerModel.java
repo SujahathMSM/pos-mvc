@@ -19,6 +19,21 @@ public class CustomerModel {
     private String province;
     private String zip;
 
+    public CustomerModel() {
+    }
+
+    public CustomerModel(String custID, String title, String name, String dob, Double salary, String address, String city, String province, String zip) {
+        this.custID = custID;
+        this.title = title;
+        this.name = name;
+        this.dob = dob;
+        this.salary = salary;
+        this.address = address;
+        this.city = city;
+        this.province = province;
+        this.zip = zip;
+    }
+     
     /**
      * @return the custID
      */
@@ -143,6 +158,11 @@ public class CustomerModel {
      */
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerModel{" + "custID=" + custID + ", title=" + title + ", name=" + name + ", dob=" + dob + ", salary=" + salary + ", address=" + address + ", city=" + city + ", province=" + province + ", zip=" + zip + '}';
     }
     
     
