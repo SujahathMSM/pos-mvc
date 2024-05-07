@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package pos.mvc.controller;
-
+import java.sql.ResultSet;
 import pos.mvc.model.CustomerModel;
 import java.sql.Connection;
 import pos.mvc.db.DBConnection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -35,5 +36,35 @@ public class CustomerController {
             return "Success";
         }
         return "Fail";
+    }
+    
+    public ArrayList<CustomerModel> getAllCustomer() throws SQLException{
+        Connection connection = DBConnection.getInstance().getConnection();
+        String query = "SELECT * FROM customer";
+        
+        PreparedStatement statement = connection.prepareStatement(query);
+        ResultSet result = statement.executeQuery();
+        
+        ArrayList<CustomerModel> customers = new ArrayList<>();
+        
+        while(result.next()) {
+            CustomerModel cm = new CustomerModel(
+                    result.getString(1), 
+                    result.getString(2), 
+                    result.getString(3),
+                    result.getString(4),
+                    result.getDouble(5), 
+                    result.getString(6), 
+                    result.getString(7), 
+                    result.getString(8), 
+                    result.getString(9)
+            );
+            
+            customers.add(cm);
+        }
+        
+        return customers;
+        
+        
     }
 }

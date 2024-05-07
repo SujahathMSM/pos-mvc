@@ -5,6 +5,7 @@
 package pos.mvc.view;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -244,6 +245,11 @@ public class CustomerView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        customerTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                customerTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(customerTable);
 
         javax.swing.GroupLayout tablepanelLayout = new javax.swing.GroupLayout(tablepanel);
@@ -305,6 +311,10 @@ public class CustomerView extends javax.swing.JFrame {
         saveCustomer();
         clear();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void customerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerTableMouseClicked
+        searchCustomer();
+    }//GEN-LAST:event_customerTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -382,6 +392,7 @@ public class CustomerView extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage());
+            Loadcustomers();
         }
    
     }
@@ -399,15 +410,32 @@ public class CustomerView extends javax.swing.JFrame {
     }
     
     private void Loadcustomers(){
-        String[] columns = {"Id", "Name", "Address", "Salary", "Postal Code"};
-        DefaultTableModel dtm = new DefaultTableModel(columns, 0){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        try {
+            String[] columns = {"Id", "Name", "Address", "Salary", "Postal Code"};
+            DefaultTableModel dtm = new DefaultTableModel(columns, 0){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+                }
+                
+            };
+            
+            ArrayList<CustomerModel> allCustomers = customerController.getAllCustomer();
+            
+            for (CustomerModel customer: allCustomers){
+                Object[] rowObj = {customer.getCustID(), customer.getTitle()+" "+customer.getName(),customer.getAddress() ,customer.getSalary(), customer.getZip()};
+                dtm.addRow(rowObj);
             }
             
-        };
-        
-        customerTable.setModel(dtm);
+            customerTable.setModel(dtm);
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void searchCustomer(){
+        String custID = customerTable.getValueAt(customerTable.getSelectedRow(), 0).toString();
+        System.out.println("ID: "+ custID);
+        txtID.setText(custID);
     }
 }
