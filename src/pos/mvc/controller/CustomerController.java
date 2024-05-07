@@ -67,4 +67,69 @@ public class CustomerController {
         
         
     }
+    
+    public CustomerModel viewCustomer(String CustID) throws SQLException{
+        Connection connection = DBConnection.getInstance().getConnection();
+        String query = "SELECT * FROM customer WHERE CustID=?";
+        
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, CustID);
+        
+        ResultSet rst = statement.executeQuery();
+        
+        while(rst.next()){
+            CustomerModel cm = new CustomerModel(
+                    rst.getString(1),
+                    rst.getString(2),
+                    rst.getString(3),
+                    rst.getString(4),
+                    rst.getDouble(5),
+                    rst.getString(6),
+                    rst.getString(7),
+                    rst.getString(8),
+                    rst.getString(9)      
+            );
+            
+            return cm;
+        }
+        
+        return null;
+    }
+    
+    public String updateCustomer(CustomerModel customerModel) throws SQLException{
+        Connection connection = DBConnection.getInstance().getConnection();
+        
+        String sql = "UPDATE customer SET CustTitle=?, CustName=?, DOB=?, Salary=?, CustAddress=?, City=?, Province=?, PostalCode=? WHERE CustID=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        
+        preparedStatement.setString(1, customerModel.getTitle());
+        preparedStatement.setString(2, customerModel.getName());
+        preparedStatement.setString(3, customerModel.getDob());
+        preparedStatement.setDouble(4, customerModel.getSalary());
+        preparedStatement.setString(5, customerModel.getAddress());
+        preparedStatement.setString(6, customerModel.getCity());
+        preparedStatement.setString(7, customerModel.getProvince());
+        preparedStatement.setString(8, customerModel.getZip());
+        preparedStatement.setString(9, customerModel.getCustID());
+        
+        if (preparedStatement.executeUpdate() > 0){
+            return "Success";
+        }
+        return "Fail";
+        
+    }
+    
+    public String deleteCustomer(String custID) throws SQLException{
+        Connection connection = DBConnection.getInstance().getConnection();
+        
+        String sql = "DELETE FROM customer WHERE CustID=?";
+        
+        PreparedStatement preparedStatement = connection.prepareCall(sql);
+        preparedStatement.setString(1, custID);
+        
+        if (preparedStatement.executeUpdate() > 0){
+            return "Success";
+        }
+        return "Fail";
+    }
 }
