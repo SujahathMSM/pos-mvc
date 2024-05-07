@@ -124,7 +124,7 @@ public class CustomerController {
         
         String sql = "DELETE FROM customer WHERE CustID=?";
         
-        PreparedStatement preparedStatement = connection.prepareCall(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, custID);
         
         if (preparedStatement.executeUpdate() > 0){
