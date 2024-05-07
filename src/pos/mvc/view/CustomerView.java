@@ -495,7 +495,7 @@ public class CustomerView extends javax.swing.JFrame {
                     txtTitle.getText(),
                     txtName.getText(),
                     txtDOB.getText(),
-                    Double.parseDouble(txtSalary.getText()),
+                    Double.valueOf(txtSalary.getText()),
                     txtAddress.getText(),
                     txtCity.getText(),
                     txtProvince.getText(),
