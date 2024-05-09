@@ -467,7 +467,7 @@ public class CustomerView extends javax.swing.JFrame {
     public void searchCustomer() {
         try {
             String custID = customerTable.getValueAt(customerTable.getSelectedRow(), 0).toString();
-            CustomerModel customerr = customerController.viewCustomer(custID);
+            CustomerModel customerr = customerController.SearchCustomer(custID);
 
             if (customerr != null) {
                 txtID.setText(customerr.getCustID());
