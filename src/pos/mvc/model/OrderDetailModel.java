@@ -9,7 +9,7 @@ package pos.mvc.model;
  * @author sujah
  */
 public class OrderDetailModel {
-    private String orderID;
+    
     private String itemCode;
     private Integer qty;
     private Double discount;
@@ -17,8 +17,8 @@ public class OrderDetailModel {
     public OrderDetailModel() {
     }
 
-    public OrderDetailModel(String orderID, String itemCode, Integer qty, Double discount) {
-        this.orderID = orderID;
+    public OrderDetailModel(String itemCode, Integer qty, Double discount) {
+        
         this.itemCode = itemCode;
         this.qty = qty;
         this.discount = discount;
@@ -27,16 +27,12 @@ public class OrderDetailModel {
     /**
      * @return the orderID
      */
-    public String getOrderID() {
-        return orderID;
-    }
+    
 
     /**
      * @param orderID the orderID to set
      */
-    public void setOrderID(String orderID) {
-        this.orderID = orderID;
-    }
+    
 
     /**
      * @return the itemCode
@@ -82,7 +78,7 @@ public class OrderDetailModel {
 
     @Override
     public String toString() {
-        return "OrderDetailModel{" + "orderID=" + orderID + ", itemCode=" + itemCode + ", qty=" + qty + ", discount=" + discount + '}';
+        return "OrderDetailModel{itemCode=" + itemCode + ", qty=" + qty + ", discount=" + discount + '}';
     }
     
     

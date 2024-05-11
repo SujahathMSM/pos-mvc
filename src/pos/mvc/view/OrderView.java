@@ -5,23 +5,28 @@
 package pos.mvc.view;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import pos.mvc.controller.CustomerController;
 import pos.mvc.controller.ItemController;
 import pos.mvc.controller.OrderController;
 import pos.mvc.model.CustomerModel;
 import pos.mvc.model.ItemModel;
+import pos.mvc.model.OrderDetailModel;
 
 /**
  *
  * @author sujah
  */
 public class OrderView extends javax.swing.JFrame {
+
     private CustomerController customerController;
     private ItemController itemController;
     private OrderController orderController;
+    ArrayList<OrderDetailModel> orderDetailModels = new ArrayList<>();
 
     /**
      * Creates new form OrderView
@@ -31,6 +36,7 @@ public class OrderView extends javax.swing.JFrame {
         orderController = new OrderController();
         itemController = new ItemController();
         customerController = new CustomerController();
+        loadTable();
     }
 
     /**
@@ -327,6 +333,7 @@ public class OrderView extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
+        addToTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**
@@ -395,9 +402,9 @@ public class OrderView extends javax.swing.JFrame {
         try {
             String custID = txtCustomerID.getText();
             CustomerModel customer = customerController.SearchCustomer(custID);
-            
-            if (customer != null){
-                lblCustomer.setText(customer.getName()+ ":"+ customer.getCity());
+
+            if (customer != null) {
+                lblCustomer.setText(customer.getName() + ":" + customer.getCity());
             } else {
                 lblCustomer.setText("Customer not found");
             }
@@ -411,9 +418,9 @@ public class OrderView extends javax.swing.JFrame {
         try {
             String itemID = txtItemID.getText();
             ItemModel item = itemController.viewItem(itemID);
-            
-            if (item != null){
-                lblItem.setText(item.getDesc()+ ","+ item.getUnitPrice()+","+item.getQuantity());
+
+            if (item != null) {
+                lblItem.setText(item.getDesc() + "," + item.getUnitPrice() + "," + item.getQuantity());
             } else {
                 lblItem.setText("Item not found");
             }
@@ -421,5 +428,36 @@ public class OrderView extends javax.swing.JFrame {
             Logger.getLogger(OrderView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
+    }
+
+    private void addToTable() {
+        OrderDetailModel odm = new OrderDetailModel(txtItemID.getText(), Integer.valueOf(txtQty.getText()), Double.valueOf(txtDiscount.getText()));
+        orderDetailModels.add(odm);
+
+        DefaultTableModel dtm = (DefaultTableModel) itemTable.getModel();
+
+        Object[] rowObj = {odm.getItemCode(), odm.getQty(), odm.getDiscount()};
+        dtm.addRow(rowObj);
+
+        clearItems();
+    }
+
+    private void loadTable() {
+        String[] columns = {"Item Code", "Quantity", "Discount"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+            }
+
+        };
+        itemTable.setModel(dtm);
+    }
+
+    private void clearItems() {
+        txtItemID.setText("");
+        txtQty.setText("");
+        txtDiscount.setText("");
+        lblItem.setText("");
     }
 }
