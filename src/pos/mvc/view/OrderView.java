@@ -5,9 +5,12 @@
 package pos.mvc.view;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pos.mvc.controller.CustomerController;
@@ -16,6 +19,7 @@ import pos.mvc.controller.OrderController;
 import pos.mvc.model.CustomerModel;
 import pos.mvc.model.ItemModel;
 import pos.mvc.model.OrderDetailModel;
+import pos.mvc.model.OrderModel;
 
 /**
  *
@@ -32,6 +36,7 @@ public class OrderView extends javax.swing.JFrame {
      * Creates new form OrderView
      */
     public OrderView() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initComponents();
         orderController = new OrderController();
         itemController = new ItemController();
@@ -167,6 +172,11 @@ public class OrderView extends javax.swing.JFrame {
 
         btnPlaceOrder.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnPlaceOrder.setText("Place Order");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout formpanelLayout = new javax.swing.GroupLayout(formpanel);
         formpanel.setLayout(formpanelLayout);
@@ -336,6 +346,11 @@ public class OrderView extends javax.swing.JFrame {
         addToTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        // TODO add your handling code here:
+        placeOrder();
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -459,5 +474,27 @@ public class OrderView extends javax.swing.JFrame {
         txtQty.setText("");
         txtDiscount.setText("");
         lblItem.setText("");
+    }
+    
+    
+    private void placeOrder(){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            OrderModel ordermodel = new OrderModel(txtOrderID.getText(), sdf.format(new Date()), txtCustomerID.getText());
+            
+            String result = orderController.placeOrder(ordermodel, orderDetailModels);
+            JOptionPane.showMessageDialog(this, result);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        } 
+        
+        clearForm();
+    }
+
+    private void clearForm() {
+        loadTable();
+        txtOrderID.setText("");
+        txtCustomerID.setText("");
     }
 }

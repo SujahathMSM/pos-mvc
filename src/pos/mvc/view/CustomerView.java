@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pos.mvc.controller.CustomerController;
@@ -25,6 +26,7 @@ public class CustomerView extends javax.swing.JFrame {
      * Creates new form CustomerView
      */
     public CustomerView() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initComponents();
         customerController = new CustomerController();
         Loadcustomers();
